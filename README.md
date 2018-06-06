@@ -9,7 +9,7 @@
 @Autowired private GmBcService.Iface broadCastClient;
 ```
 * 3、根据业务thrift服务端需求编写PooledObjectFactory，需要继承虚类com.atang.thrift.thriftPool.base.AbstractPooledObjectFactory，实现getTProtocol()方法，
-如果需要做ping检测，实现customValidate()方法，参考用例com.atang.thrift.thriftPool.example.TFramTransportPooledObjectFactory
+如果服务端要求客户端ping()来维持链接，就需要实现customValidate()方法，参考用例com.atang.thrift.thriftPool.example.TFramTransportPooledObjectFactory
 * 4、创建配置xxx-thrift-client.xml文件,例如/thriftPool/src/main/resources/thrift-client.xml，包含3个配置GenericObjectPool、
 PooledObjectFactory、TClientProxyFactory。其中PooledObjectFactory主要配置thrift服务器host和port，可支持多个配置如下：
 ```xml

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+     		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+     		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+    
+    <bean id="broadCastPoolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+        <property name="testOnBorrow" value="true"/>
+        <!-- 是否在创建链接的时候检测 -->
+        <property name="testOnCreate" value="true"/>
+        <!-- 最小链接数 -->
+        <property name="minIdle" value="2"></property>
+       <!--   资源最小空闲时间  1天-->
+        <property name="minEvictableIdleTimeMillis" value="86400000"></property>
+       <!-- 链接检测间隔  20s -->
+        <property name="timeBetweenEvictionRunsMillis" value="20000"></property>
+    </bean>
+    
+    
+    <bean id="broadCastPooledObjectFactory" class="com.atang.thrift.thriftPool.example.TFramTransportPooledObjectFactory">
+    	<property name="factoryName" value="com.atang.thrift.thriftPool.example.client.GmBcService$Client$Factory"></property>
+    	<property name="configList">
+    		<list>
+    			<bean id="userInfoTsConfig1" class="com.atang.thrift.thriftPool.modal.TSConfig">
+    				<property name="host" value="${broadCast.host}"></property>
+    				<property name="port" value="${broadCast.port}"></property>
+    				<property name="timeout" value="${broadCast.timeout}"></property>
+    			</bean>
+    		</list>
+    	</property>
+    </bean>
+    
+    <bean id="broadCastClient" class="com.atang.thrift.thriftPool.base.TClientProxyFactory">
+        <property name="pooledObjectFactory" ref="broadCastPooledObjectFactory"/>
+        <property name="ifaceName" value="com.atang.thrift.thriftPool.example.client.GmBcService$Iface"/>
+        <!-- poolConfig 可以使用默认值 -->
+        <property name="poolConfig" ref="broadCastPoolConfig"/>
+    </bean>
+
+</beans>

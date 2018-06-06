@@ -29,7 +29,7 @@ PooledObjectFactory、TClientProxyFactory。其中PooledObjectFactory主要配�
 TClientProxyFactory配置如下，用于动态代理com.atang.thrift.thriftPool.example.client.GmBcService$Iface接口，
 id="broadCastClient"用于BroadCastServiceImpl注入。
 ```xml
-<bean id="broadCastClient" class="com.atang.thrift.thriftPool.base.TClientProxyFactory">
+ <bean id="broadCastClient" class="com.atang.thrift.thriftPool.base.TClientProxyFactory">
         <property name="pooledObjectFactory" ref="broadCastPooledObjectFactory"/>
         <property name="ifaceName" value="com.atang.thrift.thriftPool.example.client.GmBcService$Iface"/>
         <!-- poolConfig 可以使用默认值 -->
@@ -38,6 +38,18 @@ id="broadCastClient"用于BroadCastServiceImpl注入。
 ```
 GenericObjectPool是apache common pools对象池配置，包含“创建链接的时候检测”、“最小链接数”、“最大链接数”、“链接检测间隔”等常用配置，
 这里可以不配置，默认最大连接数8个，最小链接数0个，可以自己根据需求自行设置。
-
+```xml
+  <bean id="broadCastPoolConfig" class="org.apache.commons.pool2.impl.GenericObjectPoolConfig">
+        <property name="testOnBorrow" value="true"/>
+        <!-- 是否在创建链接的时候检测 -->
+        <property name="testOnCreate" value="true"/>
+        <!-- 最小链接数 -->
+        <property name="minIdle" value="2"></property>
+       <!--   资源最小空闲时间  1天-->
+        <property name="minEvictableIdleTimeMillis" value="86400000"></property>
+       <!-- 链接检测间隔  20s -->
+        <property name="timeBetweenEvictionRunsMillis" value="20000"></property>
+    </bean>
+```
 ## 联系方式
 有任何疑问或者建议，请联系atang220@qq.com

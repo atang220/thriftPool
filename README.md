@@ -52,4 +52,5 @@ GenericObjectPool是apache common pools对象池配置，包含“创建链接�
     </bean>
 ```
 ## 联系方式
+author:xingjian.tang, xiaji.qiu
 有任何疑问或者建议，请联系atang220@qq.com
